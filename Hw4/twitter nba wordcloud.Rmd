@@ -1,0 +1,67 @@
+---
+title: "twitter nba wordcloud"
+output: html_document
+---
+###twitter nba wordcloud
+
+載入所需套件
+```{r}
+library(RCurl)
+library(bitops)
+library(twitteR)
+library(tm)
+library(NLP)
+library(wordcloud)
+library(RColorBrewer)
+library(textclean)
+```
+
+到twitter的API上複製TOKEN
+```{r}
+consumerKey <- "eIaUSZ0CW1baBIawv6aO3yGhA"
+consumerSecret <- "U8ceWsFc8lymqRtfhK1b1QQR1DFvDUPUORbBNkYy4ziOiOhk3a"
+accessToken <- "978170993544806400-lb7cs4vPkCtbHqwCO6vynaMceKRs0Ig"
+accessSecret <- "ewPYmyyGWce0ZgOpITkqJxJ8hVbKzkSZqecSG6Tjx6wD4"
+
+setup_twitter_oauth(consumerKey, consumerSecret, accessToken, accessSecret)
+```
+
+讀入前一千則NBA相關英文TWITTER
+```{r}
+nba_tweets <- searchTwitter("NBA", n = 1000, lang= "en")
+nba_tweets_text <- sapply(nba_tweets, function(x) x$getText())
+```
+
+清除一些表情符號
+```{r}
+nba_tweets_text <- replace_emoji(nba_tweets_text)
+for(i in seq(nba_tweets_text)){
+  nba_tweets_text[[i]]<-gsub('[[:punct:]]', '', nba_tweets_text[[i]])
+  nba_tweets_text[[i]]<-gsub("，"," ", nba_tweets_text[[i]])
+  nba_tweets_text[[i]]<-gsub("-"," ", nba_tweets_text[[i]])
+  nba_tweets_text[[i]]<-gsub("U+1F525"," ", nba_tweets_text[[i]])
+}
+
+```
+
+轉成corpus
+```{r}
+nba_corpus <- Corpus(VectorSource(nba_tweets_text))
+```
+
+
+整理乾淨
+```{r}
+nba_corpus_clean <- tm_map(nba_corpus, removePunctuation)
+nba_corpus_clean <- tm_map(nba_corpus_clean, content_transformer(tolower))
+nba_corpus_clean <- tm_map(nba_corpus_clean, removeWords, stopwords("english"))
+nba_corpus_clean <- tm_map(nba_corpus_clean, removeNumbers)
+nba_corpus_clean <- tm_map(nba_corpus_clean, stripWhitespace)
+```
+
+文字雲
+```{r}
+wordcloud(nba_corpus_clean, random.order = F, max.words = 40, scale = c(8, 0.5), colors = rainbow(50))
+```
+
+最近七六人戰績很好，加上隊中新人BEN SIMMONS打得很好，應該會拿下本季新人王，因此出現BEN、SIMMONS、SIXERS
