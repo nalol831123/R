@@ -1,0 +1,132 @@
+---
+title: "ggplot2"
+output: html_document
+---
+##ggplot2
+
+```{r}
+library(ggplot2)
+```
+用diamonds練習qplot
+```{r}
+set.seed(5)
+diamonds.subset <- diamonds[sample(nrow(diamonds), 100), ]
+```
+
+```{r}
+qplot(carat, price, data = diamonds)
+```
+用log轉換一下
+```{r}
+qplot(log(carat), log(price), data = diamonds)
+```
+幫點上色
+```{r}
+qplot(carat, price, data = diamonds.subset, color = color)
+```
+改變點的形狀
+```{r}
+qplot(carat, price, data = diamonds.subset, shape = cut)
+```
+改變透明度
+```{r}
+qplot(carat, price, data = diamonds, alpha = I(1/100))
+```
+加上smooth
+```{r}
+qplot(carat, price, data = diamonds.subset,
+geom = c("point", "smooth"))
+```
+
+```{r}
+qplot(carat, price, data = diamonds,
+geom = c("point", "smooth"))
+```
+boxplot
+```{r}
+qplot(color, price / carat, data = diamonds, geom = "boxplot")
+```
+jitter
+```{r}
+qplot(color, price / carat, data = diamonds, geom = "jitter")
+```
+加上透明度
+```{r}
+qplot(color, price / carat, data = diamonds,
+geom = "jitter", alpha = I(1 / 5))
+```
+直方圖
+```{r}
+qplot(carat, data = diamonds, geom = "histogram")
+```
+調整binwidth
+```{r}
+qplot(carat, data = diamonds, geom = "histogram",
+binwidth = 0.5, xlim = c(0, 3))
+```
+上顏色
+```{r}
+qplot(carat, data = diamonds, geom = "histogram",
+fill = color)
+```
+密度函數圖
+```{r}
+qplot(carat, data = diamonds, geom = "density")
+```
+調整寬度
+```{r}
+qplot(carat, data = diamonds, geom = "density", adjust = 3)
+```
+上色
+```{r}
+qplot(carat, data = diamonds, geom = "density",
+color = color)
+```
+直方圖加密度圖
+```{r}
+qplot(carat, ..density.., data = diamonds,
+geom = c("histogram", "density"))
+```
+
+line
+```{r}
+qplot(date, unemploy / pop, data = economics, geom = "line")
+```
+
+用path把每個點連起來
+```{r}
+qplot(unemploy / pop, uempmed, data = economics,
+geom = c("point", "path"))
+```
+加上顏色
+```{r}
+year <- function(x) as.POSIXlt(x)$year + 1900
+qplot(unemploy / pop, uempmed, data = economics,
+geom = "path", colour = year(date))
+```
+facets
+```{r}
+qplot(carat, data = diamonds, facets = color ~ cut,
+geom = "histogram", binwidth = 0.1, xlim = c(0, 3))
+```
+對一組變數分組
+```{r}
+qplot(carat, data = diamonds, facets = color ~ .,
+geom = "histogram", binwidth = 0.1, xlim = c(0, 3))
+```
+
+```{r}
+mtcars$gear <- factor(mtcars$gear,levels=c(3, 4, 5),
+  labels=c("3gears", "4gears", "5gears"))
+mtcars$am <- factor(mtcars$am,levels=c(0, 1),
+  labels=c("Automatic", "Manual"))
+mtcars$cyl <- factor(mtcars$cyl,levels=c(4, 6, 8),
+  labels=c("4cyl", "6cyl", "8cyl"))
+
+
+qplot(mpg, data = mtcars, geom = "density",
+  fill = gear, alpha = I(.5),
+  main="Distribution of Gas Milage",
+  xlab="Miles Per Gallon",
+  ylab="Density")
+```

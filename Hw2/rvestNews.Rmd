@@ -1,0 +1,26 @@
+---
+title: "rvestNews"
+output: html_document
+---
+
+載入套件
+```{r}
+library(rvest)
+```
+
+下載網站
+```{r}
+nba <-read_html("https://nba.udn.com/nba/cate/6754/6780")
+```
+
+在網站上找到標題的css
+
+```{r}
+title <- html_nodes(nba,"#news_list_body h3")
+```
+
+選出文字
+```{r}
+NbaTitle <- html_text(title)
+NbaTitle
+```

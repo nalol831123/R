@@ -1,0 +1,229 @@
+---
+title: "Plot"
+output: html_document
+---
+
+三種方法視覺化呈現資料：Base Plotting System、Lattice、ggplot2
+
+###Base Plotting System
+
+用R內建空氣品質的資料集airquality來練習
+```{r}
+library(datasets)
+head(airquality)
+```
+
+畫直方圖(Histogram)
+圖名字Histogram of Month，x軸名字月份，y軸名字頻率
+```{r}
+hist(x=airquality$Month, 
+     main="Histogram of Month",         
+     xlab="Month",                      
+     ylab="Frequency") 
+```
+
+畫盒鬚圖(Box Plot)
+看不同月份Ozone數值的分布情況
+```{r}
+boxplot(formula = Ozone ~ Month, 
+        data = airquality,       
+        xlab = "Month",          
+        ylab = "Ozone (ppb)",    
+        col ="gray")             
+```
+
+散布圖(Scatter Plot)
+看月份(Month)和氣溫(Temp)之間的關係
+
+```{r}
+plot(x=airquality$Month,            
+     y=airquality$Temp,             
+     main="Month to Temperature",   
+     xlab="Month(1~12)",            
+     ylab="Temperature(degrees F)")     
+```
+
+臭氧與風的散布關係圖
+```{r}
+plot(x=airquality$Ozone,
+     y=airquality$Wind,
+     main="Ozone to Wind",
+     xlab="Ozone(ppb)",
+     ylab="Wind(mph)",
+     pch=16                  
+) 
+```
+
+找出五月與八月的資料，標上藍色與紅色的點
+在右上角加入圖標
+建立一個線性回歸
+畫上回歸的趨勢線
+```{r}
+May_data <- airquality[airquality$Month==5, ] 
+Aug_data <- airquality[airquality$Month==8, ] 
+
+plot(x=airquality$Ozone,
+     y=airquality$Wind,
+     main="Ozone to Wind",
+     xlab="Ozone(ppb)",
+     ylab="Wind(mph)",
+     pch=16                  
+) 
+points(x=May_data$Ozone,                       
+       y=May_data$Wind, 
+       pch=16,                 
+       col="blue") 
+
+points(x=Aug_data$Ozone, 
+       y=Aug_data$Wind, 
+       pch=16,               
+       col="red")
+
+legend("topright",                                
+       pch = 1,                                   
+       col = c("blue", "red", "black"),            
+       legend = c("May", "August", "Other Month") 
+       )
+
+lm.model <- lm(Wind~Ozone, airquality)
+ 
+abline(lm.model,lwd=5)  
+
+```
+
+###Lattice
+
+載入lattice
+```{r}
+library(lattice)
+```
+
+在Lattice中，畫直方圖(Histogram)
+```{r}
+airquality$Month <- as.factor(airquality$Month) 
+
+histogram(x= ~ Ozone | Month,  
+          data=airquality,     
+          xlab="Ozone(ppb)",  
+          layout=c(5,1))       
+```
+
+畫盒鬚圖(Box Plot)
+
+```{r}
+bwplot(x = Ozone ~ Month,      
+       data = airquality,     
+       xlab =          
+       )
+```
+機率密度圖
+```{r}
+densityplot( ~ Ozone ,      
+            data=airquality
+            )
+```
+畫3D圖
+```{r}
+cloud(x=Wind~Temp+Ozone | Month, 
+       data=airquality         
+      )
+```
+
+畫散布圖
+```{r}
+xyplot(x=Wind~Temp,         
+       data=airquality,     
+       group = Month,       
+       
+       auto.key=list(space="top",          
+                     columns=5,           
+                     title="Month Labels",
+                     cex.title=1)         
+       )
+```
+
+###ggplot2
+
+```{r}
+library(ggplot2)
+```
+histogram
+```{r}
+qplot(x=Ozone,                      
+      data=airquality,              
+      geom="histogram",             
+      main = "Histogram of Ozone",  
+      xlab="Ozone(ppb)",            
+      binwidth = 25,                
+      fill= Month                  
+      )
+```
+散布圖
+```{r}
+qplot(x=Temp,                               
+      y=Ozone,                              
+      data=airquality,                      
+      geom="point",                         
+      main = "Scatter Plot of Ozone-Temp",  
+      xlab="Temp",                          
+      ylab="Ozone(ppb)",                    
+      color= Month                          
+      )
+```
+機率密度圖
+```{r}
+qplot(x=Temp,                             
+      data=airquality,                     
+      geom="density",        
+      xlab="Temp",                         
+      color= Month           
+)
+```
+
+合鬚圖
+```{r}
+qplot(x=Month,                               
+      y=Ozone,
+      data=airquality,                     
+      geom="boxplot",       
+      xlab="Temp",                          
+      color= Month          
+)
+```
+
+```{r}
+canvas <- ggplot(data=airquality)
+```
+
+```{r}
+canvas +
+geom_histogram(aes(x=Ozone,fill=Month))    
+```
+
+```{r}
+canvas +
+    geom_histogram(aes(x=Ozone,fill=Month)) +
+    
+    facet_grid(.~Month) 
+```
+
+```{r}
+ggplot(data=airquality) +   
+    
+    
+    geom_point(aes(x=Temp,  
+                   y=Ozone,
+                   main="Scatter Plot of Ozone-Temp",
+                   color=Month) 
+               ) + 
+    
+    geom_smooth(aes(x=Temp,
+                    y=Ozone)) +
+    
+    
+    labs(title="Scatter of Temp-Ozone",
+         x="Temp",
+         y="Ozone") +
+          
+    theme_bw()   
+```
