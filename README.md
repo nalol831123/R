@@ -5,7 +5,7 @@ R course
 ---------------------------------------
 
 Project 3
-鐵達尼號生存預測
+鐵達尼號生存預測 (https://nalol831123.github.io/R/project3/Titanic.html)
 
 ---------------------------------------
 
@@ -28,7 +28,7 @@ Project 1
 Week 5
 學習歷程
  + TF-IDF 文字探勘 
- + ptt 棒球版大谷翔平文字探勘(https://nalol831123.github.io/R/Hw5/PTT.html)
+ + ptt 棒球版大谷翔平文字探勘 (https://nalol831123.github.io/R/Hw5/PTT.html)
 
 ---------------------------------------
 
@@ -38,7 +38,7 @@ Week 4
  + 文字雲
  + 練習leaflet
  + 練習Twitter爬文
- + TwitterNBA文字雲(https://nalol831123.github.io/R/Hw4/twitter_nba_wordcloud.html)
+ + TwitterNBA文字雲 (https://nalol831123.github.io/R/Hw4/twitter_nba_wordcloud.html)
 
 ---------------------------------------
 
