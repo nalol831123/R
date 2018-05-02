@@ -5,7 +5,11 @@ R course
 ---------------------------------------
 
 Project 3
+<<<<<<< HEAD
 ???側?????葫
+=======
+鐵達尼號生存預測 (https://nalol831123.github.io/R/project3/Titanic.html)
+>>>>>>> 48430b1aae8f0f1c7e8e2776fb016c7fe31f899f
 
 ---------------------------------------
 
@@ -26,19 +30,34 @@ Project 1
 ---------------------------------------
 
 Week 5
+<<<<<<< HEAD
 摮貊?風蝔?
  + TF-IDF ?????? 
  + ptt 璉??之靚瑞?像??????(https://nalol831123.github.io/R/Hw5/PTT.html)
+=======
+學習歷程
+ + TF-IDF 文字探勘 
+ + ptt 棒球版大谷翔平文字探勘 (https://nalol831123.github.io/R/Hw5/PTT.html)
+>>>>>>> 48430b1aae8f0f1c7e8e2776fb016c7fe31f899f
 
 ---------------------------------------
 
 Week 4
+<<<<<<< HEAD
 摮貊?風蝔?
  + ?????????
  + ???
  + 蝺渡?eaflet
  + 蝺渡?witter????
  + TwitterNBA???(https://nalol831123.github.io/R/Hw4/twitter_nba_wordcloud.html)
+=======
+學習歷程
+ + 文本分析和清理
+ + 文字雲
+ + 練習leaflet
+ + 練習Twitter爬文
+ + TwitterNBA文字雲 (https://nalol831123.github.io/R/Hw4/twitter_nba_wordcloud.html)
+>>>>>>> 48430b1aae8f0f1c7e8e2776fb016c7fe31f899f
 
 ---------------------------------------
 
