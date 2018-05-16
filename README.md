@@ -1,6 +1,10 @@
 # R
 R course
 
+---------------------------------------
+
+Project 4
+aporiori練習 (https://nalol831123.github.io/R/project4%EF%BC%8Dapriori/aporiori-kobeshooting.html)
 
 ---------------------------------------
 
@@ -46,7 +50,7 @@ Week 4
 
 Week 3
 學習歷程
- + 學習ggplot2
+ + 學習ggplot2
  + diamonds資料視覺化練習 (https://nalol831123.github.io/R/Hw3/diamonds.html)
  + 練習Base Plotting System、Lattice、ggplot2 (https://nalol831123.github.io/R/Hw3/ThreeWayToPlot.html)
  + 練習ggplot2 (https://nalol831123.github.io/R/Hw3/ggplot2.html)
@@ -55,7 +59,7 @@ Week 3
 
 Week 2
 學習歷程
- + 學習爬蟲
+ + 學習爬蟲
  + 完成Hw2、practice_1、practice_2、practice_33
  + Gomaji網站爬蟲 (https://nalol831123.github.io/R/Hw2/Gomaji.html)
  + udn新聞網站爬蟲 (https://nalol831123.github.io/R/Hw2/rvestNews.html)
