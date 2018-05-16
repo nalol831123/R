@@ -1,0 +1,1 @@
+kobe <- read.csv("data.csv")

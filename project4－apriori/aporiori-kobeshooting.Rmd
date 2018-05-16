@@ -1,0 +1,79 @@
+---
+title: "aporiori-kobe投籃數據"
+output: html_document
+---
+##aporiori練習
+####到kaggle下載kobe的投籃數據來練習aporiori，像說可以找出他投進與否的關鍵
+####資料來源：https://www.kaggle.com/c/kobe-bryant-shot-selection/kernels
+
+### 1. 載入資料
+
+```{r}
+kobe <- read.csv("kobedata.csv")
+```
+
+### 2. 資料整理
+####目前資料的樣子好像aporiori無法跑，所以需要先整理資料
+####首先移除有NA值的欄位
+```{r}
+kobe <- na.omit(kobe)
+```
+
+```{r}
+table(is.na(kobe))
+```
+
+####確定無NA值後因為有太多因素，選出其中seconds_remaining、shot_zone_basic、shot_type，來看與投進與否的關係
+```{r}
+kb <- kobe[ ,c("seconds_remaining","shot_zone_basic","shot_type","shot_made_flag")]
+```
+
+### 3. aporiori
+####將資料型態轉成factor
+```{r}
+kb$seconds_remaining <- as.factor(kb$seconds_remaining)
+kb$shot_made_flag <- as.factor(kb$shot_made_flag)
+
+```
+
+####調整參數，跑apriori
+```{r}
+require(arules)
+kbrule <- apriori(kb, 
+                # min support & confidence, 最小規則長度(lhs+rhs)
+                parameter=list(minlen=3, supp=0.1, conf=0.5),  
+                appearance = list(default="lhs",
+                                  rhs=c("shot_made_flag=0", "shot_made_flag=1") 
+                                  # 右手邊顯示的特徵
+                )
+)  
+```
+
+
+```{r}
+inspect(kbrule)
+```
+
+
+```{r}
+sort.kbrule <- sort(kbrule, by="lift")
+inspect(sort.kbrule)
+```
+
+
+```{r}
+subset.matrix <- as.matrix(is.subset(x=sort.kbrule, y=sort.kbrule))
+subset.matrix[lower.tri(subset.matrix, diag=T)] <- NA
+redundant <- colSums(subset.matrix, na.rm=T) >= 1
+sort.kbrule <- sort.kbrule[!redundant]
+inspect(sort.kbrule)
+```
+
+
+```{r}
+require(arulesViz)
+plot(kbrule)
+plot(kbrule, method="graph", control=list(type="items"))
+plot(kbrule, method="grouped")
+```
+
