@@ -1,0 +1,159 @@
+---
+title: "TitanicWithXgboostAndCforest"
+output: html_document
+---
+## xgboost與cForest比賽誰預測鐵達尼號生存比較準 
+#### 資料來源：https://www.kaggle.com/c/titanic/data
+
+###1. 載入套件
+```{r}
+library(data.table)
+library(Matrix)
+library(xgboost)
+library(caret)
+library(dplyr)
+library(randomForest)
+library(party)
+library(corrplot)
+```
+
+###2. 載入資料
+```{r}
+df_train <- fread('train.csv', sep=",", na.strings = "NA")
+df_test  <- fread('test.csv' , sep=",", na.strings = "NA")
+```
+
+###3. 把Age的缺失值用平均數補上
+```{r}
+df_test[is.na(df_test$Age),"Age"] <- mean(df_test$Age, na.rm = TRUE)
+df_train[is.na(df_train$Age),"Age"] <- mean(df_train$Age, na.rm = TRUE)
+```
+###4. 用姓名找出title然後分類
+```{r}
+data = rbind(df_train,df_test,fill=T)
+data$Title <- gsub('(.*, )|(\\..*)', '', data$Name)
+
+rare_title <- c('Dona', 'Lady', 'the Countess','Capt', 'Col', 'Don', 
+                'Dr', 'Major', 'Rev', 'Sir', 'Jonkheer')
+
+data$Title[data$Title == 'Mlle']        <- 'Miss' 
+data$Title[data$Title == 'Ms']          <- 'Miss'
+data$Title[data$Title == 'Mme']         <- 'Mrs' 
+data$Title[data$Title %in% rare_title]  <- 'Rare Title'
+
+data$Surname <- sapply(data$Name,  
+                       function(x) strsplit(x, split = '[,.]')[[1]][1])
+```
+###5. 依據家庭大小分類
+```{r}
+data$Fsize <- data$SibSp + data$Parch + 1
+
+data$FsizeD[data$Fsize == 1] <- 'singleton'
+data$FsizeD[data$Fsize < 5 & data$Fsize > 1] <- 'small'
+data$FsizeD[data$Fsize > 4] <- 'large'
+
+data$isAlone <- 0
+data[data$Fsize == 1,"isAlone"] <- 1
+```
+###6. 留下剩下要的變數
+```{r}
+
+data <- data[,-c("Ticket","Name","Surname")]
+ohe_feats = c('Pclass', "Sex",'SibSp' ,'Parch', 'Embarked', 'Title', 'FsizeD', 'isAlone','Fsize')
+
+
+for (f in ohe_feats){
+  levels = unique(data[[f]])
+  data[[f]] = factor(data[[f]], level = levels)
+}
+```
+###5. 將資料轉成sparse matrix才能跑xgboost
+```{r}
+train = data[data$PassengerId %in% df_train$PassengerId,]
+y_train <- train[!is.na(Survived),Survived]
+train = train[,Survived:=NULL]
+train = train[,PassengerId:=NULL]
+train_sparse <- data.matrix(train)
+
+test = data[data$PassengerId  %in% df_test$PassengerId,]
+test_ids <- test[,PassengerId]
+test[,Survived:=NULL]
+test[,PassengerId:=NULL]
+test_sparse <- data.matrix(test)
+
+dtrain <- xgb.DMatrix(data=train_sparse, label=y_train)
+dtest <- xgb.DMatrix(data=test_sparse)
+```
+###6. 設定hyperparameters建立xgboost模型
+```{r}
+param <- list(objective   = "binary:logistic",
+              eval_metric = "error",
+              max_depth   = 7,
+              eta         = 0.1,
+              gammma      = 1,
+              colsample_bytree = 0.5,
+              min_child_weight = 1)
+
+set.seed(1234)
+
+# Pass in our hyperparameteres and train the model 
+system.time(xgb <- xgboost(params  = param,
+                           data    = dtrain,
+                           label   = y_train, 
+                           nrounds = 500,
+                           print_every_n = 100,
+                           verbose = 1))
+```
+###7. 預測模型，並利用原本的train資料測試準確率
+```{r}
+pred <- predict(xgb, dtest)
+pred.resp <- ifelse(pred >= 0.5, 1, 0)
+
+pred2 <- predict(xgb, dtrain)
+pred2.resp <- ifelse(pred2 >= 0.5, 1, 0)
+success <- 0
+for(i in c(1:891)){
+  if(pred2.resp[i] == data$Survived[i]){
+    success <- success + 1
+  }
+}
+print(success / 1000)
+```
+## 完成Xgboost部分，接下來輪到cForest
+###8. 用同一份data與相同的變數，將型態轉成factor
+```{r}
+data$Pclass <- factor(data$Pclass)
+data$Sex <- factor(data$SibSp)
+data$Parch <- factor(data$Parch)
+data$Embarked <- factor(data$Embarked)
+data$Title <- factor(data$Title)
+data$FsizeD <- factor(data$FsizeD)
+data$isAlone <- factor(data$isAlone)
+data$Fsize <- factor(data$Fsize)
+```
+
+###9. 建立cForest模型
+```{r}
+train <- data[1:891,]
+test <- data[892:1309,]
+set.seed(102)
+model <- cforest(factor(Survived) ~ Pclass + Sex + SibSp + Parch + Embarked + Title + FsizeD + isAlone + Fsize, data = train)
+
+```
+
+###10. 預測模型，並利用原本的train資料測試準確率
+```{r}
+predict1 <- predict(model, test,  OOB=TRUE, type = "response")
+predict2 <- predict(model, train,  OOB=TRUE, type = "response")
+success <- 0
+for(i in c(1:891)){
+  if(predict2[i] == data$Survived[i]){
+    success <- success + 1
+  }
+}
+print(success / 1000)
+```
+
+## 結論
+### 在用同一份資料與變數的情況下，Xgboost的準確率有0.863，而cForest只有0.723，看來Xgboost真的名不虛傳，厲害很多
+
