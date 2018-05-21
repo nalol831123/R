@@ -9,13 +9,14 @@ aporiori練習 (https://nalol831123.github.io/R/project4%EF%BC%8Dapriori/aporior
 ---------------------------------------
 
 Project 3
-鐵達尼號生存預測 (https://nalol831123.github.io/R/project3/Titanic.html)
-
+鐵達尼號生存預測 
+ + cForest預測(https://nalol831123.github.io/R/project3/Titanic.html)
+ + cForest與XGboost比較(https://nalol831123.github.io/R/project2Santander%20Customer%20Satisfaction/xgboost/TitanicWithXgboostAndCforest.html)
 
 ---------------------------------------
 
 Project 2
-Santander Customer Satisfaction (尚未完成)
+Santander Customer Satisfaction (完成)
 
 ---------------------------------------
 
