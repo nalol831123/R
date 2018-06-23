@@ -1,5 +1,18 @@
 # R
 R course
+---------------------------------------
+
+Final Project 
+綜藝大熱門YouTube觀看次數預測 (https://b03602023.github.io/1062CSX_project/final_project/ppt/final_project.pdf)
+
+
+---------------------------------------
+
+Project 5
+KerasR
++ (https://rgmmmt4r.github.io/106-2_R_b04303117/project5/project5_group6_diamonds02copy.html)
++ (https://rgmmmt4r.github.io/106-2_R_b04303117/project2/kaggle_group6_01copy.html)
+
 
 ---------------------------------------
 
@@ -16,8 +29,9 @@ Project 3
 ---------------------------------------
 
 Project 2
-Santander Customer Satisfaction (完成)
-
+Santander Customer Satisfaction 
+ + ppt(https://b03602023.github.io/1062CSX_project/project_2/presentation/Santander-Customer-Satisfaction.pdf)
+ + code(https://rgmmmt4r.github.io/106-2_R_b04303117/project2/kaggle_group6_01copy.html)
 ---------------------------------------
 
 Week 7
@@ -27,14 +41,14 @@ Week 7
 ---------------------------------------
 
 Project 1
-尚未完成
+ + TF-IDF練習(https://nalol831123.github.io/R/project1/TFIDF.html)
  
 ---------------------------------------
 
 Week 5
 學習歷程
  + TF-IDF 文字探勘 
- + ptt 棒球版大谷翔平文字探勘 (https://nalol831123.github.io/R/Hw5/PTT.html)
+ + ptt 棒球版大谷翔平文字探勘(https://nalol831123.github.io/R/Hw5/PTT.html)
 
 
 ---------------------------------------
@@ -45,16 +59,16 @@ Week 4
  + 文字雲
  + 練習leaflet
  + 練習Twitter爬文
- + TwitterNBA文字雲 (https://nalol831123.github.io/R/Hw4/twitter_nba_wordcloud.html)
+ + TwitterNBA文字雲(https://nalol831123.github.io/R/Hw4/twitter_nba_wordcloud.html)
 
 ---------------------------------------
 
 Week 3
 學習歷程
  + 學習ggplot2
- + diamonds資料視覺化練習 (https://nalol831123.github.io/R/Hw3/diamonds.html)
- + 練習Base Plotting System、Lattice、ggplot2 (https://nalol831123.github.io/R/Hw3/ThreeWayToPlot.html)
- + 練習ggplot2 (https://nalol831123.github.io/R/Hw3/ggplot2.html)
+ + diamonds資料視覺化練習(https://nalol831123.github.io/R/Hw3/diamonds.html)
+ + 練習Base Plotting System、Lattice、ggplot2(https://nalol831123.github.io/R/Hw3/ThreeWayToPlot.html)
+ + 練習ggplot2(https://nalol831123.github.io/R/Hw3/ggplot2.html)
 
 ---------------------------------------
 
@@ -62,8 +76,8 @@ Week 2
 學習歷程
  + 學習爬蟲
  + 完成Hw2、practice_1、practice_2、practice_33
- + Gomaji網站爬蟲 (https://nalol831123.github.io/R/Hw2/Gomaji.html)
- + udn新聞網站爬蟲 (https://nalol831123.github.io/R/Hw2/rvestNews.html)
+ + Gomaji網站爬蟲(https://nalol831123.github.io/R/Hw2/Gomaji.html)
+ + udn新聞網站爬蟲(https://nalol831123.github.io/R/Hw2/rvestNews.html)
  
 ---------------------------------------
 
