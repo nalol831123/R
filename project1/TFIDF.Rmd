@@ -1,0 +1,294 @@
+---
+title: "TF-IDF"
+output: html_document
+---
+##TF-IDF練習
+###世足目前開踢一周，賽前被看好的奪冠大熱門德國與阿根廷目前表現不佳，雙雙面臨淘汰邊緣，來看看Ptt世足版鄉民對兩隊的看法如何
+
+##1.載入套件
+```{r}
+library(bitops)
+library(httr)
+library(RCurl)
+library(XML)
+library(NLP)
+library(tm)
+library(tmcn)
+library(jiebaRD)
+library(jiebaR)
+library(dplyr)
+```
+
+
+##1.爬取ptt
+```{r }
+
+data <- list()
+title <- list()
+date <- list()
+
+##世足6/15開賽至今
+
+for( i in c(1043:1142)){
+  tmp <- paste(i, '.html', sep='')
+  url <- paste('www.ptt.cc/bbs/WorldCup/index', tmp, sep='')
+  html <- htmlParse(GET(url),encoding = "UTF-8")
+  title.list <- xpathSApply(html, "//div[@class='title']/a[@href]", xmlValue)
+  url.list <- xpathSApply(html, "//div[@class='title']/a[@href]", xmlAttrs)
+  date.list <- xpathSApply(html, "//div[@class='meta']/div[@class='date']",xmlValue)
+  data <- rbind(data, as.matrix(paste('www.ptt.cc', url.list, sep='')))
+  title <- rbind(title, as.matrix(title.list))
+  date <- rbind(date, as.matrix(date.list))
+}
+```
+
+```{r}
+data <- unlist(data)
+title <- unlist(title)
+date <- unlist(date)
+```
+
+##2.找出有關鍵字的標題
+```{r }
+german <- c()
+german.url <- c()
+german.date <- c()
+
+# 找出有德國的關鍵字
+german1 <- grep("德國", title)
+
+german <- c(german,title[german1])
+german.url <- c(german.url, data[german1])
+german.date <- c(german.date, date[german1])
+
+
+argen <- c()
+argen.url <- c()
+argen.date <- c()
+
+# 找出有阿根廷的關鍵字，加上阿根廷的頭號球星梅西
+argen1 <- grep("阿根廷", title)
+argen2 <- grep("梅西", title)
+argen3 <- grep("梅c", title)
+
+argen <- c(argen,title[argen1])
+argen <- c(argen,title[argen2])
+argen <- c(argen,title[argen3])
+
+argen.url <- c(argen.url, data[argen1])
+argen.url <- c(argen.url, data[argen2])
+argen.url <- c(argen.url, data[argen3])
+
+argen.date <- c(argen.date, date[argen1])
+argen.date <- c(argen.date, date[argen2])
+argen.date <- c(argen.date, date[argen3])
+
+```
+
+##3.爬取每篇有德國文章的留言 文本清理 建立TermDocumentMatrix
+```{r }
+message <- list()
+cc = worker()
+germanTDF <- data.frame()
+argenTDF <- data.frame()
+country <- c()
+postdate <- c()
+
+#爬取每篇有德國文章的留言
+for(i in c(1:length(german))){
+  html <- htmlParse(GET(german.url[i]),encoding = "UTF-8")
+  message.list <- xpathSApply(html, "//div[@class='push']/span[@class='f3 push-content']", xmlValue)
+  message <- unlist(message.list)
+  
+  country <- c(country,"german")
+  if(grepl("6/15",german.date[i])== TRUE){
+    postdate <- c(postdate, "6/15") }
+  else if(grepl("6/16",german.date[i])== TRUE){
+    postdate <- c(postdate, "6/16")}
+  else if(grepl("6/17",german.date[i])== TRUE){
+    postdate <- c(postdate, "6/17")}
+  else if(grepl("6/18",german.date[i])== TRUE){
+    postdate <- c(postdate, "6/18")}
+  else if(grepl("6/19",german.date[i])== TRUE){
+    postdate <- c(postdate, "6/19")}
+  else if(grepl("6/20",german.date[i])== TRUE){
+    postdate <- c(postdate, "6/20")}
+  else if(grepl("6/21",german.date[i])== TRUE){
+    postdate <- c(postdate, "6/21")}
+  else if(grepl("6/22",german.date[i])== TRUE){
+    postdate <- c(postdate, "6/22")}
+  else if(grepl("6/23",german.date[i])== TRUE){
+    postdate <- c(postdate, "6/23")}
+  else if(grepl("6/24",german.date[i])== TRUE){
+    postdate <- c(postdate, "6/24")}
+
+
+  d.corpus <- VCorpus( VectorSource(message) )
+  d.corpus <- tm_map(d.corpus, removePunctuation)
+  d.corpus <- tm_map(d.corpus, removeNumbers)
+  d.corpus <- tm_map(d.corpus, function(word) {
+    gsub("[A-Za-z0-9]", "", word)
+  })
+  abc <- data.frame(table(cc[as.character(d.corpus)]))
+  colnames(abc) <- c("word", as.character(i))
+  if(i == 1){
+    germanTDF <- abc}
+  else{
+    germanTDF <- merge(germanTDF, abc, by = "word", all = T)}
+}
+
+```
+
+##4.爬取每篇有阿根廷文章的留言 文本清理 建立TermDocumentMatrix
+```{r }
+for(i in c(1:length(argen))){
+  html <- htmlParse(GET(argen.url[i]),encoding = "UTF-8")
+  message.list <- xpathSApply(html, "//div[@class='push']/span[@class='f3 push-content']", xmlValue)
+  message <- unlist(message.list)
+    country <- c(country,"argen")
+  if(grepl("6/15",argen.date[i])== TRUE){
+    postdate <- c(postdate, "6/15") }
+  else if(grepl("6/16",argen.date[i])== TRUE){
+    postdate <- c(postdate, "6/16")}
+  else if(grepl("6/17",argen.date[i])== TRUE){
+    postdate <- c(postdate, "6/17")}
+  else if(grepl("6/18",argen.date[i])== TRUE){
+    postdate <- c(postdate, "6/18")}
+  else if(grepl("6/19",argen.date[i])== TRUE){
+    postdate <- c(postdate, "6/19")}
+  else if(grepl("6/20",argen.date[i])== TRUE){
+    postdate <- c(postdate, "6/20")}
+  else if(grepl("6/21",argen.date[i])== TRUE){
+    postdate <- c(postdate, "6/21")}
+  else if(grepl("6/22",argen.date[i])== TRUE){
+    postdate <- c(postdate, "6/22")}
+  else if(grepl("6/23",argen.date[i])== TRUE){
+    postdate <- c(postdate, "6/23")}
+  else if(grepl("6/24",argen.date[i])== TRUE){
+    postdate <- c(postdate, "6/24")}
+  d.corpus <- VCorpus( VectorSource(message) )
+  d.corpus <- tm_map(d.corpus, removePunctuation)
+  d.corpus <- tm_map(d.corpus, removeNumbers)
+  d.corpus <- tm_map(d.corpus, function(word) {
+    gsub("[A-Za-z0-9]", "", word)
+  })
+  abc <- data.frame(table(cc[as.character(d.corpus)]))
+  colnames(abc) <- c("word", as.character(i))
+  if(i == 1){
+    argenTDF <- abc}
+  else{
+    argenTDF <- merge(argenTDF, abc, by = "word", all = T)}
+}
+country <- country[1:274]
+```
+
+```{r }
+germanTDF[is.na(germanTDF)] <- 0
+argenTDF[is.na(argenTDF)] <- 0
+```
+
+
+```{r }
+library(knitr)
+kable(head(germanTDF))
+```
+
+
+```{r }
+kable(head(argenTDF))
+```
+
+##5.將已建好的 TDM 轉成 TF-IDF
+```{r }
+n <- length(german)
+tf1 <- apply(as.matrix(germanTDF[,2:(n+1)]), 2, sum)
+library(Matrix)
+idfCal1 <- function(word_doc)
+{ 
+  log2( n / nnzero(word_doc) ) 
+}
+idf1 <- apply(as.matrix(germanTDF[,2:(n+1)]), 1, idfCal1)
+
+doc1.tfidf <- germanTDF
+
+for(x in 1:nrow(germanTDF))
+{
+  for(y in 2:ncol(germanTDF))
+  {
+    doc1.tfidf[x,y] <- (doc1.tfidf[x,y] / tf1[y-1]) * idf1[x]
+  }
+}
+
+```
+
+
+##與德國相關重要詞彙
+```{r }
+topwords <- subset(head(doc1.tfidf[order(doc1.tfidf[2], decreasing = TRUE), ]), select = c(word))
+for (i in c(3:ncol(doc1.tfidf))){
+  topwords <- cbind(topwords, head(doc1.tfidf[order(doc1.tfidf[i], decreasing = TRUE),])[1])
+}
+
+
+AllTop = as.data.frame( table(as.matrix(topwords)) )
+AllTop = AllTop[order(AllTop$Freq, decreasing = TRUE),]
+
+kable(head(AllTop))
+```
+
+
+```{r }
+n <- length(argen)
+tf2 <- apply(as.matrix(argenTDF[,2:(n+1)]), 2, sum)
+
+idfCal2 <- function(word_doc)
+{ 
+  log2( n / nnzero(word_doc) ) 
+}
+idf2 <- apply(as.matrix(argenTDF[,2:(n+1)]), 1, idfCal2)
+
+doc2.tfidf <- argenTDF
+
+for(x in 1:nrow(argenTDF))
+{
+  for(y in 2:ncol(argenTDF))
+  {
+    doc2.tfidf[x,y] <- (doc2.tfidf[x,y] / tf2[y-1]) * idf2[x]
+  }
+}
+```
+
+##與阿根廷相關重要詞彙
+```{r }
+topwords <- subset(head(doc2.tfidf[order(doc2.tfidf[2], decreasing = TRUE), ]), select = c(word))
+for (i in c(3:ncol(doc2.tfidf))){
+  topwords <- cbind(topwords, head(doc2.tfidf[order(doc2.tfidf[i], decreasing = TRUE),])[1])
+}
+
+AllTop = as.data.frame( table(as.matrix(topwords)) )
+AllTop = AllTop[order(AllTop$Freq, decreasing = TRUE),]
+
+kable(head(AllTop))
+```
+
+##每日的發文量
+```{r }
+library(ggplot2)
+```
+
+
+```{r }
+plot1 <- data.frame(country,postdate)
+
+names(plot1) <- c("國家", "日期")
+ggplot(plot1, aes(postdate,fill = country)) + geom_bar(position="dodge")
+```
+
+##總結
+###德國的關鍵字比較不解
+###推就是ptt裡面大家常用的話，瑞典則和德國在同一組，巴拉克是德國已經退休的前足球明星，不知道為什麼會出現在這裡
+###阿根廷的就很好懂
+###第一場意外和冰島踢平手
+###而會出現葡萄牙推測可能是因為阿根廷的頭號球星與葡萄牙的頭號球星c羅，目前同為世界上最好的足球員，一直被拿出來比較
+###6/16與6/21到6/22的凌晨有阿根廷的比賽，因此討論度高
+###6/17則是德國的比賽，因此討論度高
