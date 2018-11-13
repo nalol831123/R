@@ -1,5 +1,10 @@
-## Data Science Programming
-106-2 R data science course
+# Data Science Programming
+---------------------------------------
+
+Introduce Myself
+My name is 黃侲艗 ( ChenI Huang ). 
+It is my first time learning R. I really enjoy myself making some cool projects~ Let's work hard and "stick to R" !
+
 ---------------------------------------
 
 Final Project 
