@@ -1,7 +1,5 @@
-# Data Science Programming
+## Data Science Programming
 106-2 R data science course
----------------------------------------
-
 ---------------------------------------
 
 Final Project 
