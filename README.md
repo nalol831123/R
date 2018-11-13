@@ -1,9 +1,6 @@
 # Data Science Programming
-=============
-
 ### 106-2 R data science course
 ###### Course hw, records, sample codes for Data science programming 2018 spring
-
 ---------------------------------------
 
 Week 1
@@ -37,7 +34,7 @@ Learning Process
  + text clearning
  + Data visualization: word cloud
  + Practice leaflet
- + Practice Twitter爬文
+ + Practice Twitter
  + Learn Twitter api, token, and grab information from NBA fan's page
  (https://nalol831123.github.io/R/Hw4/twitter_nba_wordcloud.html)
 
