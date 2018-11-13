@@ -1,8 +1,8 @@
 # Data Science Programming
 =============
 
-###106-2 R data science course
-######Course hw, records, sample codes for Data science programming 2018 spring
+### 106-2 R data science course
+###### Course hw, records, sample codes for Data science programming 2018 spring
 
 ---------------------------------------
 
