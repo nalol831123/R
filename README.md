@@ -4,14 +4,14 @@
 ---------------------------------------
 
 Week 1
-Learning Process
+Learning Progress
  + Learn basic R syntax
  + Finish Hw1、practice_1、practice_2、practice_3
  
 ---------------------------------------
 
 Week 2
-Learning Process
+Learning Progress
  + Learn R web crawling
  + Finish Hw2、practice_1、practice_2、practice_3
  + Crawling the website Gomaji (https://nalol831123.github.io/R/Hw2/Gomaji.html)
@@ -20,7 +20,7 @@ Learning Process
 ---------------------------------------
 
 Week 3
-Learning Process
+Learning Progress
  + Learn ggplot2
  + Practice data visualization with diamonds data (https://nalol831123.github.io/R/Hw3/diamonds.html)
  + Practice Base Plotting System、Lattice、ggplot2 (https://nalol831123.github.io/R/Hw3/ThreeWayToPlot.html)
@@ -30,7 +30,7 @@ Learning Process
 ---------------------------------------
 
 Week 4
-Learning Process
+Learning Progress
  + text clearning
  + Data visualization: word cloud
  + Practice leaflet
@@ -41,21 +41,21 @@ Learning Process
 ---------------------------------------
 
 Week 5
-Learning Process
+Learning Progress
  + Learn TF-IDF 
  + Using the data for a Taiwan's BBS(PTT) as example to practice TF-IDF (https://nalol831123.github.io/R/Hw5/PTT.html)
 
 ---------------------------------------
 
 Project 1
-Learning Process
+Learning Progress
  + Make a analysis with the text and comment on the Germany and Argentina in PTT based on TF-IDF   
   (https://nalol831123.github.io/R/project1/TFIDF.html)
   
 ---------------------------------------
 
 Week 7
-Learning Process
+Learning Progress
  + Learn basic Machine Learning
 
 ---------------------------------------
